@@ -1,0 +1,45 @@
+"use client";
+
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { BarChart3, CalendarClock, Users, Wallet } from "lucide-react";
+import { cn } from "@/lib/utils";
+
+const navItems = [
+  { href: "/dashboard", label: "Dashboard", icon: BarChart3 },
+  { href: "/dashboard/borrowers", label: "Business Portfolio", icon: Users },
+  { href: "/dashboard/payments", label: "Payments", icon: CalendarClock },
+  { href: "/dashboard/investors", label: "Investors", icon: Wallet },
+];
+
+export function DashboardSidebar() {
+  const pathname = usePathname();
+
+  return (
+    <aside className="w-full border-b bg-white p-4 md:min-h-screen md:w-64 md:border-b-0 md:border-r">
+      <div className="mb-6">
+        <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Loan Manager</p>
+        <h1 className="text-xl font-semibold text-emerald-700">Private Lending SaaS</h1>
+      </div>
+      <nav className="grid gap-1.5">
+        {navItems.map((item) => {
+          const Icon = item.icon;
+          const isActive = pathname === item.href || pathname.startsWith(`${item.href}/`);
+          return (
+            <Link
+              key={item.href}
+              href={item.href}
+              className={cn(
+                "flex items-center gap-2 rounded-lg px-3 py-2 text-sm transition-colors",
+                isActive ? "bg-emerald-50 text-emerald-700" : "text-muted-foreground hover:bg-muted hover:text-foreground",
+              )}
+            >
+              <Icon className="h-4 w-4" />
+              {item.label}
+            </Link>
+          );
+        })}
+      </nav>
+    </aside>
+  );
+}
