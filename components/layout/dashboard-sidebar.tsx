@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { BarChart3, CalendarClock, Users, Wallet } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -18,8 +19,17 @@ export function DashboardSidebar() {
   return (
     <aside className="w-full border-b bg-white p-4 md:min-h-screen md:w-64 md:border-b-0 md:border-r">
       <div className="mb-6">
-        <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Loan Manager</p>
-        <h1 className="text-xl font-semibold text-emerald-700">Private Lending SaaS</h1>
+        <div className="mb-2 flex items-center gap-2">
+          <Image
+            src="/loan-manager-logo.png"
+            alt="HJ Financial Operation"
+            width={32}
+            height={32}
+            className="h-8 w-8 rounded-md object-cover"
+          />
+          <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Loan Manager</p>
+        </div>
+        <h1 className="text-xl font-semibold text-emerald-700">HJ Financial Operation</h1>
       </div>
       <nav className="grid gap-1.5">
         {navItems.map((item) => {

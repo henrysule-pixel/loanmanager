@@ -15,8 +15,18 @@ const jetBrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Loan Management SaaS",
-  description: "Private lending loan management dashboard",
+  title: "HJ Financial Operation",
+  description: "Private lending operations and loan management platform",
+  icons: {
+    icon: "/loan-manager-logo.png",
+    shortcut: "/loan-manager-logo.png",
+    apple: "/loan-manager-logo.png",
+  },
+  openGraph: {
+    title: "HJ Financial Operation",
+    description: "Private lending operations and loan management platform",
+    images: ["/loan-manager-logo.png"],
+  },
 };
 
 export default function RootLayout({
