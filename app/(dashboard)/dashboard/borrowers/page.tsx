@@ -30,6 +30,7 @@ export default async function BorrowersPage({
                   <TH>Full Name</TH>
                   <TH>Phone</TH>
                   <TH>Email</TH>
+                  <TH>Action</TH>
                   <TH>Created</TH>
                 </TR>
               </THead>
@@ -46,6 +47,11 @@ export default async function BorrowersPage({
                     </TD>
                     <TD>{borrower.phone_number}</TD>
                     <TD>{borrower.email}</TD>
+                    <TD>
+                      <Link href={`/dashboard/borrowers/${borrower.id}/edit`} className="font-medium text-emerald-700 hover:underline">
+                        Edit
+                      </Link>
+                    </TD>
                     <TD>{new Date(borrower.created_at).toLocaleDateString()}</TD>
                   </TR>
                 ))}

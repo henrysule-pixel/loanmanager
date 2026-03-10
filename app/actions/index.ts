@@ -6,6 +6,7 @@ import { recomputeInvestorBalances } from "@/lib/investors/capital";
 import { assertValidLoanStatusTransition } from "@/lib/loans/status-workflow";
 import {
   borrowerSchema,
+  borrowerUpdateSchema,
   investorSchema,
   investorUpdateSchema,
   investorTransactionSchema,
@@ -413,4 +414,60 @@ export async function updateInvestorAction(formData: FormData) {
 
   revalidatePath("/dashboard/investors");
   revalidatePath(`/dashboard/investors/${parsed.id}`);
+}
+
+export async function updateBorrowerAction(formData: FormData) {
+  await requireUserId();
+  const parsed = borrowerUpdateSchema.parse(Object.fromEntries(formData.entries()));
+  const supabase = createSupabaseServerClient();
+
+  const fullName = `${parsed.first_name} ${parsed.last_name}`.trim();
+  const intakeRecord = [
+    `First Name: ${parsed.first_name}`,
+    `Last Name: ${parsed.last_name}`,
+    `Phone Number: ${parsed.phone_number}`,
+    `Email: ${parsed.email}`,
+    `Client Address: ${parsed.address}`,
+    `Contract Date: ${parsed.contract_date || "N/A"}`,
+    `Date of Birth: ${parsed.date_of_birth || "N/A"}`,
+    `Government ID: ${parsed.government_id_number}`,
+    `Lawyer Name: ${parsed.attorney_name || "N/A"}`,
+    `Lawyer Phone: ${parsed.attorney_phone || "N/A"}`,
+    `Lawyer Email: ${parsed.attorney_email || "N/A"}`,
+    `Note: ${parsed.notes || "N/A"}`,
+  ].join("\n");
+
+  const payload = {
+    first_name: parsed.first_name,
+    last_name: parsed.last_name,
+    full_name: fullName,
+    phone: parsed.phone_number,
+    phone_number: parsed.phone_number,
+    email: parsed.email,
+    address: parsed.address,
+    contract_date: parsed.contract_date || null,
+    date_of_birth: parsed.date_of_birth || undefined,
+    government_id: parsed.government_id_number,
+    government_id_number: parsed.government_id_number,
+    attorney_name: parsed.attorney_name || null,
+    attorney_phone: parsed.attorney_phone || null,
+    attorney_email: parsed.attorney_email || null,
+    notes: parsed.notes || null,
+    intake_record: intakeRecord,
+  };
+
+  let updateResult = await supabase.from("borrowers").update(payload).eq("id", parsed.id);
+  if (updateResult.error && /first_name|last_name|contract_date|intake_record/i.test(updateResult.error.message)) {
+    const { first_name, last_name, contract_date, intake_record, ...fallbackPayload } = payload;
+    void first_name;
+    void last_name;
+    void contract_date;
+    void intake_record;
+    updateResult = await supabase.from("borrowers").update(fallbackPayload).eq("id", parsed.id);
+  }
+  if (updateResult.error) throw new Error(updateResult.error.message);
+
+  revalidatePath("/dashboard/borrowers");
+  revalidatePath(`/dashboard/borrowers/${parsed.id}`);
+  revalidatePath("/dashboard");
 }

@@ -56,6 +56,22 @@ export const borrowerSchema = z.object({
   amount_balance_to_refund: z.coerce.number().nonnegative().optional(),
 });
 
+export const borrowerUpdateSchema = z.object({
+  id: z.string().uuid(),
+  first_name: z.string().min(2),
+  last_name: z.string().min(2),
+  phone_number: phoneSchema,
+  email: emailSchema,
+  address: z.string().min(5),
+  contract_date: z.string().optional(),
+  date_of_birth: z.string().optional(),
+  government_id_number: z.string().min(4),
+  attorney_name: z.string().optional(),
+  attorney_phone: z.string().optional(),
+  attorney_email: z.string().optional(),
+  notes: z.string().optional(),
+});
+
 export const loanSchema = z.object({
   loan_id: z.string().min(3),
   borrower_id: z.string().uuid(),
