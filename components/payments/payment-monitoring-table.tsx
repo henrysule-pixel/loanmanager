@@ -71,7 +71,18 @@ export function PaymentMonitoringTable({ rows }: { rows: PaymentMonitoringRow[] 
             >
               <TD className="font-semibold text-slate-800">{row.loan_id}</TD>
               <TD>{row.borrower_name}</TD>
-              <TD>{toCurrency(Number(row.principal_amount))}</TD>
+              <TD>
+                <Input
+                  form={`loan-monitoring-${row.id}`}
+                  name="principal_amount"
+                  type="text"
+                  inputMode="decimal"
+                  defaultValue={row.principal_amount}
+                  placeholder="$0.00"
+                  className="min-w-[130px] border-slate-300 bg-white"
+                  disabled={!isEditing}
+                />
+              </TD>
               <TD className="min-w-[200px]">
                 <Input
                   form={`loan-monitoring-${row.id}`}

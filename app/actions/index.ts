@@ -246,6 +246,7 @@ export async function updateLoanMonitoringAction(formData: FormData) {
   const latestNote = parsed.note ?? parsed.status_note;
   const mergedNotes = [loanData.notes, latestNote].filter(Boolean).join("\n");
   const payload = {
+    principal_amount: parsed.principal_amount ?? null,
     monthly_payment: parsed.monthly_payment ?? null,
     start_date: parsed.contract_date || undefined,
     payment_due_date: parsed.payment_due_date || null,
@@ -257,7 +258,10 @@ export async function updateLoanMonitoringAction(formData: FormData) {
   };
 
   let updateResult = await supabase.from("loans").update(payload).eq("id", parsed.loan_id);
-  if (updateResult.error && /monthly_payment|payment_due_date|unpaid_monthly_due|means_of_payment|arrears/i.test(updateResult.error.message)) {
+  if (
+    updateResult.error &&
+    /principal_amount|monthly_payment|payment_due_date|unpaid_monthly_due|means_of_payment|arrears/i.test(updateResult.error.message)
+  ) {
     const fallbackPayload = {
       start_date: parsed.contract_date || undefined,
       maturity_date: parsed.expiration_date,
