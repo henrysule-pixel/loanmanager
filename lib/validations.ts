@@ -117,6 +117,7 @@ export const loanPaymentSchema = z.object({
 export const loanMonitoringSchema = z.object({
   loan_id: z.string().uuid(),
   borrower_id: z.string().uuid().optional(),
+  borrower_name: z.string().trim().min(2).optional(),
   principal_amount: moneyAmountSchema,
   monthly_payment: moneyAmountSchema,
   contract_date: z.string().optional(),

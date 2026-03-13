@@ -237,6 +237,20 @@ export async function updateLoanMonitoringAction(formData: FormData) {
   await requireUserId();
   const parsed = loanMonitoringSchema.parse(Object.fromEntries(formData.entries()));
   const supabase = createSupabaseServerClient();
+  let borrowerIdFromName: string | undefined;
+  const typedBorrowerName = parsed.borrower_name?.trim();
+  if (typedBorrowerName) {
+    const { data: matchedBorrower, error: borrowerLookupError } = await supabase
+      .from("borrowers")
+      .select("id")
+      .ilike("full_name", typedBorrowerName)
+      .limit(1)
+      .single();
+    if (borrowerLookupError || !matchedBorrower) {
+      throw new Error("Borrower not found. Enter an existing borrower name.");
+    }
+    borrowerIdFromName = matchedBorrower.id;
+  }
   const { data: loanData, error: loanLookupError } = await supabase
     .from("loans")
     .select("notes")
@@ -247,7 +261,7 @@ export async function updateLoanMonitoringAction(formData: FormData) {
   const latestNote = parsed.note ?? parsed.status_note;
   const mergedNotes = [loanData.notes, latestNote].filter(Boolean).join("\n");
   const payload = {
-    borrower_id: parsed.borrower_id ?? undefined,
+    borrower_id: borrowerIdFromName ?? parsed.borrower_id ?? undefined,
     principal_amount: parsed.principal_amount ?? null,
     monthly_payment: parsed.monthly_payment ?? null,
     start_date: parsed.contract_date || undefined,

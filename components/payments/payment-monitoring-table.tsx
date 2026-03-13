@@ -247,18 +247,13 @@ export function PaymentMonitoringTable({ rows, borrowers }: { rows: PaymentMonit
               <TD className="font-semibold text-slate-800">{row.loan_id}</TD>
               <TD>
                 {isEditing ? (
-                  <select
+                  <Input
                     form={`loan-monitoring-${row.id}`}
-                    name="borrower_id"
-                    defaultValue={row.borrower_id}
-                    className="h-10 min-w-[170px] rounded-md border border-slate-300 bg-white px-3 text-sm"
-                  >
-                    {borrowers.map((borrower) => (
-                      <option key={borrower.id} value={borrower.id}>
-                        {borrower.full_name}
-                      </option>
-                    ))}
-                  </select>
+                    name="borrower_name"
+                    type="text"
+                    defaultValue={row.borrower_name}
+                    className="min-w-[170px] border-slate-300 bg-white"
+                  />
                 ) : (
                   row.borrower_name
                 )}
