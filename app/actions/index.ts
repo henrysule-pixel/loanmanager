@@ -10,6 +10,7 @@ import {
   investorSchema,
   investorUpdateSchema,
   investorTransactionSchema,
+  loanMonitoringCreateSchema,
   loanMonitoringSchema,
   loanPaymentSchema,
   loanSchema,
@@ -270,6 +271,52 @@ export async function updateLoanMonitoringAction(formData: FormData) {
     updateResult = await supabase.from("loans").update(fallbackPayload).eq("id", parsed.loan_id);
   }
   if (updateResult.error) throw new Error(updateResult.error.message);
+
+  revalidatePath("/dashboard/payments");
+  revalidatePath("/dashboard/loans");
+  revalidatePath("/dashboard");
+}
+
+export async function createLoanMonitoringRowAction(formData: FormData) {
+  await requireUserId();
+  const parsed = loanMonitoringCreateSchema.parse(Object.fromEntries(formData.entries()));
+  const supabase = createSupabaseServerClient();
+
+  const payload = {
+    loan_id: parsed.loan_id,
+    borrower_id: parsed.borrower_id,
+    principal_amount: parsed.principal_amount,
+    interest_rate: 0,
+    start_date: parsed.contract_date,
+    maturity_date: parsed.expiration_date,
+    status: "APPLICATION" as Database["public"]["Enums"]["loan_status"],
+    loan_status: "APPLICATION" as Database["public"]["Enums"]["loan_status"],
+    risk_rating: "MEDIUM",
+    monthly_payment: parsed.monthly_payment ?? null,
+    payment_due_date: parsed.payment_due_date || null,
+    unpaid_monthly_due: parsed.unpaid_monthly_due ?? null,
+    means_of_payment: parsed.means_of_payment ?? null,
+    arrears: parsed.arrears ?? null,
+    notes: parsed.note?.trim() ? parsed.note.trim() : null,
+  };
+
+  let insertResult = await supabase.from("loans").insert(payload);
+  if (insertResult.error && /monthly_payment|payment_due_date|unpaid_monthly_due|means_of_payment|arrears/i.test(insertResult.error.message)) {
+    const fallbackPayload = {
+      loan_id: parsed.loan_id,
+      borrower_id: parsed.borrower_id,
+      principal_amount: parsed.principal_amount,
+      interest_rate: 0,
+      start_date: parsed.contract_date,
+      maturity_date: parsed.expiration_date,
+      status: "APPLICATION" as Database["public"]["Enums"]["loan_status"],
+      loan_status: "APPLICATION" as Database["public"]["Enums"]["loan_status"],
+      risk_rating: "MEDIUM",
+      notes: parsed.note?.trim() ? parsed.note.trim() : null,
+    };
+    insertResult = await supabase.from("loans").insert(fallbackPayload);
+  }
+  if (insertResult.error) throw new Error(insertResult.error.message);
 
   revalidatePath("/dashboard/payments");
   revalidatePath("/dashboard/loans");

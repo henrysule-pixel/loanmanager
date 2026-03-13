@@ -131,6 +131,42 @@ export const loanMonitoringSchema = z.object({
   status_note: z.string().optional(),
 });
 
+export const loanMonitoringCreateSchema = z.object({
+  loan_id: z.string().min(3),
+  borrower_id: z.string().uuid(),
+  principal_amount: z.preprocess(
+    (value) => {
+      if (typeof value === "string") {
+        return value.trim().replace(/[$,\s]/g, "");
+      }
+      return value;
+    },
+    z.coerce.number().positive(),
+  ),
+  monthly_payment: moneyAmountSchema,
+  contract_date: z.string().min(1),
+  payment_due_date: z.string().optional(),
+  means_of_payment: z.preprocess(
+    (value) => (typeof value === "string" && value.trim() === "" ? undefined : value),
+    z.enum(["CHEQUE", "INTERAC"]).optional(),
+  ),
+  unpaid_monthly_due: z.preprocess(
+    (value) => {
+      if (value === null || value === undefined) return undefined;
+      if (typeof value === "string") {
+        const trimmed = value.trim();
+        if (!trimmed) return undefined;
+        return trimmed.replace(/[$,\s]/g, "");
+      }
+      return value;
+    },
+    z.coerce.number().nonnegative().optional(),
+  ),
+  arrears: moneyAmountSchema,
+  expiration_date: z.string().min(1),
+  note: z.string().optional(),
+});
+
 export const investorSchema = z.object({
   full_name: z.string().min(2),
   first_name: z.string().min(2).optional(),

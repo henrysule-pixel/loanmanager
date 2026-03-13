@@ -70,6 +70,12 @@ export default async function PaymentsPage({ searchParams }: PaymentsPageProps) 
           new Date(row.payment_due_date) < new Date(new Date().toISOString().slice(0, 10)),
       ),
     })) ?? [];
+  const { data: borrowersData } = await supabase.from("borrowers").select("id, full_name").order("full_name");
+  const borrowers =
+    (borrowersData as { id: string; full_name: string }[] | null)?.map((borrower) => ({
+      id: borrower.id,
+      full_name: borrower.full_name,
+    })) ?? [];
 
   const now = new Date();
   const currentMonth = now.getMonth();
@@ -144,7 +150,7 @@ export default async function PaymentsPage({ searchParams }: PaymentsPageProps) 
         </Link>
       </div>
 
-      <PaymentMonitoringTable rows={filteredRows} />
+      <PaymentMonitoringTable rows={filteredRows} borrowers={borrowers} />
     </div>
   );
 }
