@@ -38,7 +38,7 @@ export function PaymentMonitoringTable({ rows }: { rows: PaymentMonitoringRow[] 
   return (
     <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white shadow-sm">
       <Table>
-        <THead className="bg-slate-50">
+        <THead className="bg-[#f7f9fc]">
           <TR>
             <TH>Loan</TH>
             <TH>Borrower</TH>
@@ -67,7 +67,7 @@ export function PaymentMonitoringTable({ rows }: { rows: PaymentMonitoringRow[] 
             return (
             <TR
               key={`${row.id}-${rowResetToken[row.id] ?? 0}`}
-              className={row.is_overdue ? "border-l-4 border-l-rose-500 bg-rose-50/40" : "hover:bg-slate-50/70"}
+              className={row.is_overdue ? "border-l-4 border-l-rose-500 bg-rose-50/40" : "hover:bg-[#f8fafc]"}
             >
               <TD className="font-semibold text-slate-800">{row.loan_id}</TD>
               <TD>{row.borrower_name}</TD>
@@ -193,7 +193,7 @@ export function PaymentMonitoringTable({ rows }: { rows: PaymentMonitoringRow[] 
                 >
                   {isEditing ? (
                     <div className="flex gap-2">
-                      <Button type="submit" disabled={isPending} className="bg-emerald-700 hover:bg-emerald-800">
+                      <Button type="submit" disabled={isPending} className="bg-amber-500 text-white hover:bg-amber-600">
                         Save
                       </Button>
                       <Button type="button" variant="outline" disabled={isPending} onClick={() => resetRow(row.id)}>

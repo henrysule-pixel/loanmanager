@@ -9,10 +9,10 @@ export default async function DashboardLayout({ children }: { children: React.Re
   const userDisplayName = userRecord?.full_name ?? userRecord?.email ?? userId ?? "Authenticated user";
 
   return (
-    <div className="min-h-screen bg-emerald-50/50">
+    <div className="min-h-screen bg-slate-100">
       <div className="md:flex">
         <DashboardSidebar />
-        <main className="flex-1 p-4 md:p-8">
+        <main className="flex-1 p-4 md:p-6 lg:p-8">
           <DashboardHeader userDisplayName={userDisplayName} />
           {children}
         </main>

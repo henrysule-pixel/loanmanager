@@ -17,8 +17,8 @@ export function DashboardSidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="w-full border-b bg-white p-4 md:min-h-screen md:w-64 md:border-b-0 md:border-r">
-      <div className="mb-6">
+    <aside className="w-full border-b border-slate-800 bg-[#0f1e3d] p-4 text-slate-200 md:min-h-screen md:w-64 md:border-b-0 md:border-r">
+      <div className="mb-8">
         <div className="mb-2 flex items-center gap-2">
           <Image
             src="/loan-manager-logo.png"
@@ -27,9 +27,9 @@ export function DashboardSidebar() {
             height={32}
             className="h-8 w-8 rounded-md object-cover"
           />
-          <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Loan Manager</p>
+          <p className="text-xs font-semibold uppercase tracking-wide text-slate-300">Loan Manager</p>
         </div>
-        <h1 className="text-xl font-semibold text-emerald-700">HJ Financial Operation</h1>
+        <h1 className="text-xl font-semibold text-white">HJ Financial Operation</h1>
       </div>
       <nav className="grid gap-1.5">
         {navItems.map((item) => {
@@ -41,7 +41,9 @@ export function DashboardSidebar() {
               href={item.href}
               className={cn(
                 "flex items-center gap-2 rounded-lg px-3 py-2 text-sm transition-colors",
-                isActive ? "bg-emerald-50 text-emerald-700" : "text-muted-foreground hover:bg-muted hover:text-foreground",
+                isActive
+                  ? "bg-[#1a2f5f] text-amber-300"
+                  : "text-slate-300 hover:bg-[#16284f] hover:text-white",
               )}
             >
               <Icon className="h-4 w-4" />
