@@ -247,6 +247,7 @@ export async function updateLoanMonitoringAction(formData: FormData) {
   const latestNote = parsed.note ?? parsed.status_note;
   const mergedNotes = [loanData.notes, latestNote].filter(Boolean).join("\n");
   const payload = {
+    borrower_id: parsed.borrower_id ?? undefined,
     principal_amount: parsed.principal_amount ?? null,
     monthly_payment: parsed.monthly_payment ?? null,
     start_date: parsed.contract_date || undefined,

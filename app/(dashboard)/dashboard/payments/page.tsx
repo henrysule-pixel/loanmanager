@@ -18,7 +18,7 @@ export default async function PaymentsPage({ searchParams }: PaymentsPageProps) 
   const withDueCols = await supabase
     .from("loans")
     .select(
-      "id, loan_id, loan_status, principal_amount, monthly_payment, start_date, maturity_date, payment_due_date, unpaid_monthly_due, means_of_payment, arrears, borrowers(full_name)",
+      "id, loan_id, borrower_id, loan_status, principal_amount, monthly_payment, start_date, maturity_date, payment_due_date, unpaid_monthly_due, means_of_payment, arrears, borrowers(full_name)",
     )
     .order("created_at", { ascending: false });
 
@@ -27,7 +27,7 @@ export default async function PaymentsPage({ searchParams }: PaymentsPageProps) 
       ? (
           await supabase
             .from("loans")
-            .select("id, loan_id, loan_status, principal_amount, start_date, maturity_date, borrowers(full_name)")
+            .select("id, loan_id, borrower_id, loan_status, principal_amount, start_date, maturity_date, borrowers(full_name)")
             .order("created_at", { ascending: false })
         ).data
       : withDueCols.data;
@@ -37,6 +37,7 @@ export default async function PaymentsPage({ searchParams }: PaymentsPageProps) 
       | {
           id: string;
           loan_id: string;
+          borrower_id: string;
           loan_status: string;
           principal_amount: number;
           monthly_payment?: number | null;
@@ -53,6 +54,7 @@ export default async function PaymentsPage({ searchParams }: PaymentsPageProps) 
     )?.map((row) => ({
       id: row.id,
       loan_id: row.loan_id,
+      borrower_id: row.borrower_id,
       borrower_name: row.borrowers?.full_name ?? "N/A",
       loan_status: row.loan_status,
       principal_amount: Number(row.principal_amount),

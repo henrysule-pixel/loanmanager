@@ -12,6 +12,7 @@ import { toCurrency } from "@/lib/utils";
 interface PaymentMonitoringRow {
   id: string;
   loan_id: string;
+  borrower_id: string;
   borrower_name: string;
   loan_status: string;
   principal_amount: number;
@@ -244,7 +245,24 @@ export function PaymentMonitoringTable({ rows, borrowers }: { rows: PaymentMonit
               className={row.is_overdue ? "border-l-4 border-l-rose-500 bg-rose-50/40" : "hover:bg-[#f8fafc]"}
             >
               <TD className="font-semibold text-slate-800">{row.loan_id}</TD>
-              <TD>{row.borrower_name}</TD>
+              <TD>
+                {isEditing ? (
+                  <select
+                    form={`loan-monitoring-${row.id}`}
+                    name="borrower_id"
+                    defaultValue={row.borrower_id}
+                    className="h-10 min-w-[170px] rounded-md border border-slate-300 bg-white px-3 text-sm"
+                  >
+                    {borrowers.map((borrower) => (
+                      <option key={borrower.id} value={borrower.id}>
+                        {borrower.full_name}
+                      </option>
+                    ))}
+                  </select>
+                ) : (
+                  row.borrower_name
+                )}
+              </TD>
               <TD>
                 <Input
                   form={`loan-monitoring-${row.id}`}
