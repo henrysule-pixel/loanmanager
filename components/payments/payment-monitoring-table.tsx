@@ -38,7 +38,7 @@ export function PaymentMonitoringTable({ rows }: { rows: PaymentMonitoringRow[] 
   return (
     <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white shadow-sm">
       <Table>
-        <THead className="bg-[#f7f9fc]">
+        <THead className="bg-[#0f1e3d] [&_th]:text-slate-200">
           <TR>
             <TH>Loan</TH>
             <TH>Borrower</TH>
