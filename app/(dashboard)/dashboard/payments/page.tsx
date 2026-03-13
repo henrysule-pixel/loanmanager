@@ -99,33 +99,33 @@ export default async function PaymentsPage({ searchParams }: PaymentsPageProps) 
         description="Daily staff workflow for payment due date tracking, unpaid monthly dues, expiration updates, and follow-up notes."
       />
       <div className="grid gap-4 md:grid-cols-3">
-        <Card>
-          <CardHeader>
-            <CardTitle>Total Unpaid Monthly Due</CardTitle>
+        <Card className="border-slate-200">
+          <CardHeader className="border-b border-slate-100">
+            <CardTitle className="text-slate-700">Total Unpaid Monthly Due</CardTitle>
           </CardHeader>
           <CardContent className="text-2xl font-semibold text-emerald-700">{toCurrency(totalUnpaidMonthlyDue)}</CardContent>
         </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle>Overdue Loans</CardTitle>
+        <Card className="border-slate-200">
+          <CardHeader className="border-b border-slate-100">
+            <CardTitle className="text-slate-700">Overdue Loans</CardTitle>
           </CardHeader>
           <CardContent className="text-2xl font-semibold text-red-600">{overdueCount}</CardContent>
         </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle>Expiring In 30 Days</CardTitle>
+        <Card className="border-slate-200">
+          <CardHeader className="border-b border-slate-100">
+            <CardTitle className="text-slate-700">Expiring In 30 Days</CardTitle>
           </CardHeader>
           <CardContent className="text-2xl font-semibold text-amber-600">{expiringSoonCount}</CardContent>
         </Card>
       </div>
 
-      <div className="flex flex-wrap items-center gap-2 rounded-xl border bg-white p-4 shadow-soft">
+      <div className="flex flex-wrap items-center gap-2 rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
         <Link href="/dashboard/payments">
           <span
             className={
               filterView === "all"
-                ? "inline-flex h-10 items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-emerald-700"
-                : "inline-flex h-10 items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium hover:bg-muted"
+                ? "inline-flex h-10 items-center justify-center rounded-md bg-emerald-700 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-800"
+                : "inline-flex h-10 items-center justify-center rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
             }
           >
             All Loans
@@ -135,8 +135,8 @@ export default async function PaymentsPage({ searchParams }: PaymentsPageProps) 
           <span
             className={
               filterView === "unpaid-month"
-                ? "inline-flex h-10 items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-emerald-700"
-                : "inline-flex h-10 items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium hover:bg-muted"
+                ? "inline-flex h-10 items-center justify-center rounded-md bg-emerald-700 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-800"
+                : "inline-flex h-10 items-center justify-center rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
             }
           >
             Unpaid This Month
